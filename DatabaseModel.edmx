@@ -1,0 +1,549 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Alias="Self" Namespace="PLMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012">
+        <EntityType Name="loan_app_or_rej">
+          <Key>
+            <PropertyRef Name="loan_id" />
+          </Key>
+          <Property Name="loan_id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
+          <Property Name="application_id" Nullable="false" Type="int" />
+          <Property Name="date_of_approval" Type="date" />
+          <Property Name="amount_sanctioned" Type="money" />
+          <Property Name="interest_rate" Type="float" />
+          <Property Name="reasons" Type="varchar(max)" />
+          <Property Name="status" MaxLength="1" Type="char" />
+        </EntityType>
+        <EntityType Name="loan_application">
+          <Key>
+            <PropertyRef Name="application_id" />
+          </Key>
+          <Property Name="application_id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
+          <Property Name="name" Nullable="false" MaxLength="100" Type="varchar" />
+          <Property Name="email_id" Nullable="false" MaxLength="50" Type="varchar" />
+          <Property Name="gender" Nullable="false" MaxLength="10" Type="varchar" />
+          <Property Name="date_of_birth" Nullable="false" Type="date" />
+          <Property Name="age" Nullable="false" Type="int" />
+          <Property Name="contact_no" Nullable="false" MaxLength="10" Type="varchar" />
+          <Property Name="address" Nullable="false" Type="varchar(max)" />
+          <Property Name="pan_no" Nullable="false" MaxLength="10" Type="varchar" />
+          <Property Name="loan_amount" Nullable="false" Type="money" />
+          <Property Name="monthly_income" Nullable="false" Type="money" />
+          <Property Name="company_name" MaxLength="100" Type="varchar" />
+          <Property Name="designation" MaxLength="50" Type="varchar" />
+          <Property Name="office_address" Type="varchar(max)" />
+          <Property Name="office_contact_no" MaxLength="10" Type="varchar" />
+          <Property Name="office_email" MaxLength="50" Type="varchar" />
+          <Property Name="existing_loan" Nullable="false" Type="bit" />
+          <Property Name="photo" Nullable="false" Type="varbinary(max)" />
+          <Property Name="address_document" Nullable="false" Type="varbinary(max)" />
+          <Property Name="status" Nullable="false" MaxLength="10" Type="varchar" />
+          <Property Name="reg_id" Nullable="false" Type="int" />
+        </EntityType>
+        <EntityType Name="loan_officer_assign">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
+          <Property Name="application_id" Nullable="false" Type="int" />
+          <Property Name="officer_id" Nullable="false" Type="int" />
+        </EntityType>
+        <EntityType Name="officers">
+          <Key>
+            <PropertyRef Name="officer_id" />
+          </Key>
+          <Property Name="officer_id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
+          <Property Name="role_id" Nullable="false" Type="int" />
+          <Property Name="name" Nullable="false" MaxLength="50" Type="varchar" />
+          <Property Name="email_id" Nullable="false" MaxLength="50" Type="varchar" />
+          <Property Name="contact_no" Nullable="false" MaxLength="10" Type="nchar" />
+          <Property Name="username" Nullable="false" MaxLength="15" Type="nchar" />
+          <Property Name="password" Nullable="false" MaxLength="15" Type="nchar" />
+        </EntityType>
+        <EntityType Name="registration">
+          <Key>
+            <PropertyRef Name="reg_id" />
+          </Key>
+          <Property Name="reg_id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
+          <Property Name="name" Nullable="false" MaxLength="50" Type="varchar" />
+          <Property Name="contact_no" Nullable="false" MaxLength="10" Type="varchar" />
+          <Property Name="gender" Nullable="false" MaxLength="1" Type="char" />
+          <Property Name="date_of_birth" Nullable="false" Type="date" />
+          <Property Name="address" Nullable="false" MaxLength="150" Type="varchar" />
+          <Property Name="username" Nullable="false" MaxLength="15" Type="varchar" />
+          <Property Name="password" Nullable="false" MaxLength="20" Type="varchar" />
+          <Property Name="email_id" Nullable="false" MaxLength="50" Type="varchar" />
+          <Property Name="question" Nullable="false" MaxLength="100" Type="varchar" />
+          <Property Name="answer" Nullable="false" MaxLength="100" Type="varchar" />
+          <Property Name="status" Nullable="false" MaxLength="1" Type="char" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'PLMS.dbo.registration_remark' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="registration_remark">
+          <Key>
+            <PropertyRef Name="reg_id" />
+          </Key>
+          <Property Name="reg_id" Nullable="false" Type="int" />
+          <Property Name="remark" MaxLength="50" Type="varchar" />
+        </EntityType>
+        <EntityType Name="roles">
+          <Key>
+            <PropertyRef Name="role_id" />
+          </Key>
+          <Property Name="role_id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
+          <Property Name="role_name" Nullable="false" MaxLength="20" Type="varchar" />
+        </EntityType>
+        <Association Name="ApplicationId_FK">
+          <End Type="Self.loan_application" Multiplicity="1" Role="loan_application" />
+          <End Type="Self.loan_officer_assign" Multiplicity="*" Role="loan_officer_assign" />
+          <ReferentialConstraint>
+            <Principal Role="loan_application">
+              <PropertyRef Name="application_id" />
+            </Principal>
+            <Dependent Role="loan_officer_assign">
+              <PropertyRef Name="application_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ApplicationID">
+          <End Type="Self.loan_application" Multiplicity="1" Role="loan_application" />
+          <End Type="Self.loan_app_or_rej" Multiplicity="*" Role="loan_app_or_rej" />
+          <ReferentialConstraint>
+            <Principal Role="loan_application">
+              <PropertyRef Name="application_id" />
+            </Principal>
+            <Dependent Role="loan_app_or_rej">
+              <PropertyRef Name="application_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_loan_application_registration">
+          <End Type="Self.registration" Multiplicity="1" Role="registration">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Self.loan_application" Multiplicity="*" Role="loan_application" />
+          <ReferentialConstraint>
+            <Principal Role="registration">
+              <PropertyRef Name="reg_id" />
+            </Principal>
+            <Dependent Role="loan_application">
+              <PropertyRef Name="reg_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_registration_remark_registration">
+          <End Type="Self.registration" Multiplicity="1" Role="registration" />
+          <End Type="Self.registration_remark" Multiplicity="0..1" Role="registration_remark" />
+          <ReferentialConstraint>
+            <Principal Role="registration">
+              <PropertyRef Name="reg_id" />
+            </Principal>
+            <Dependent Role="registration_remark">
+              <PropertyRef Name="reg_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_role_id">
+          <End Type="Self.roles" Multiplicity="1" Role="roles" />
+          <End Type="Self.officers" Multiplicity="*" Role="officers" />
+          <ReferentialConstraint>
+            <Principal Role="roles">
+              <PropertyRef Name="role_id" />
+            </Principal>
+            <Dependent Role="officers">
+              <PropertyRef Name="role_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OfficerId_FK">
+          <End Type="Self.officers" Multiplicity="1" Role="officers" />
+          <End Type="Self.loan_officer_assign" Multiplicity="*" Role="loan_officer_assign" />
+          <ReferentialConstraint>
+            <Principal Role="officers">
+              <PropertyRef Name="officer_id" />
+            </Principal>
+            <Dependent Role="loan_officer_assign">
+              <PropertyRef Name="officer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PLMSModelStoreContainer">
+          <EntitySet Name="loan_app_or_rej" EntityType="Self.loan_app_or_rej" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="loan_application" EntityType="Self.loan_application" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="loan_officer_assign" EntityType="Self.loan_officer_assign" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="officers" EntityType="Self.officers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="registration" EntityType="Self.registration" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="roles" EntityType="Self.roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="registration_remark" EntityType="Self.registration_remark" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [registration_remark].[reg_id] AS [reg_id], 
+    [registration_remark].[remark] AS [remark]
+    FROM [dbo].[registration_remark] AS [registration_remark]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="ApplicationId_FK" Association="Self.ApplicationId_FK">
+            <End EntitySet="loan_application" Role="loan_application" />
+            <End EntitySet="loan_officer_assign" Role="loan_officer_assign" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ApplicationID" Association="Self.FK_ApplicationID">
+            <End EntitySet="loan_application" Role="loan_application" />
+            <End EntitySet="loan_app_or_rej" Role="loan_app_or_rej" />
+          </AssociationSet>
+          <AssociationSet Name="FK_loan_application_registration" Association="Self.FK_loan_application_registration">
+            <End EntitySet="registration" Role="registration" />
+            <End EntitySet="loan_application" Role="loan_application" />
+          </AssociationSet>
+          <AssociationSet Name="FK_registration_remark_registration" Association="Self.FK_registration_remark_registration">
+            <End EntitySet="registration" Role="registration" />
+            <End EntitySet="registration_remark" Role="registration_remark" />
+          </AssociationSet>
+          <AssociationSet Name="FK_role_id" Association="Self.FK_role_id">
+            <End EntitySet="roles" Role="roles" />
+            <End EntitySet="officers" Role="officers" />
+          </AssociationSet>
+          <AssociationSet Name="OfficerId_FK" Association="Self.OfficerId_FK">
+            <End EntitySet="officers" Role="officers" />
+            <End EntitySet="loan_officer_assign" Role="loan_officer_assign" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PLMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="loan_app_or_rej">
+          <Key>
+            <PropertyRef Name="loan_id" />
+          </Key>
+          <Property Name="loan_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="application_id" Type="Int32" Nullable="false" />
+          <Property Name="date_of_approval" Type="DateTime" Precision="0" />
+          <Property Name="amount_sanctioned" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="interest_rate" Type="Double" />
+          <Property Name="reasons" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="loan_application" Relationship="Self.FK_ApplicationID" FromRole="loan_app_or_rej" ToRole="loan_application" />
+        </EntityType>
+        <EntityType Name="loan_application">
+          <Key>
+            <PropertyRef Name="application_id" />
+          </Key>
+          <Property Name="application_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="email_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="date_of_birth" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="age" Type="Int32" Nullable="false" />
+          <Property Name="contact_no" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="pan_no" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="loan_amount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="monthly_income" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="company_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="designation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="office_address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="office_contact_no" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="office_email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="existing_loan" Type="Boolean" Nullable="false" />
+          <Property Name="photo" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="address_document" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="reg_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="loan_app_or_rej" Relationship="Self.FK_ApplicationID" FromRole="loan_application" ToRole="loan_app_or_rej" />
+          <NavigationProperty Name="loan_officer_assign" Relationship="Self.ApplicationId_FK" FromRole="loan_application" ToRole="loan_officer_assign" />
+          <NavigationProperty Name="registration" Relationship="Self.FK_loan_application_registration" FromRole="loan_application" ToRole="registration" />
+        </EntityType>
+        <EntityType Name="loan_officer_assign">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="application_id" Type="Int32" Nullable="false" />
+          <Property Name="officer_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="loan_application" Relationship="Self.ApplicationId_FK" FromRole="loan_officer_assign" ToRole="loan_application" />
+          <NavigationProperty Name="officer" Relationship="Self.OfficerId_FK" FromRole="loan_officer_assign" ToRole="officers" />
+        </EntityType>
+        <EntityType Name="officer">
+          <Key>
+            <PropertyRef Name="officer_id" />
+          </Key>
+          <Property Name="officer_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="role_id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="email_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="contact_no" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="username" Type="String" MaxLength="15" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="15" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="loan_officer_assign" Relationship="Self.OfficerId_FK" FromRole="officers" ToRole="loan_officer_assign" />
+          <NavigationProperty Name="role" Relationship="Self.FK_role_id" FromRole="officers" ToRole="roles" />
+        </EntityType>
+        <EntityType Name="registration">
+          <Key>
+            <PropertyRef Name="reg_id" />
+          </Key>
+          <Property Name="reg_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="contact_no" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="date_of_birth" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="address" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="username" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="email_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="question" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="answer" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="loan_application" Relationship="Self.FK_loan_application_registration" FromRole="registration" ToRole="loan_application" />
+          <NavigationProperty Name="registration_remark" Relationship="Self.FK_registration_remark_registration" FromRole="registration" ToRole="registration_remark" />
+        </EntityType>
+        <EntityType Name="role">
+          <Key>
+            <PropertyRef Name="role_id" />
+          </Key>
+          <Property Name="role_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="role_name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="officers" Relationship="Self.FK_role_id" FromRole="roles" ToRole="officers" />
+        </EntityType>
+        <EntityType Name="registration_remark">
+          <Key>
+            <PropertyRef Name="reg_id" />
+          </Key>
+          <Property Name="reg_id" Type="Int32" Nullable="false" />
+          <Property Name="remark" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="registration" Relationship="Self.FK_registration_remark_registration" FromRole="registration_remark" ToRole="registration" />
+        </EntityType>
+        <Association Name="FK_ApplicationID">
+          <End Role="loan_application" Type="Self.loan_application" Multiplicity="1" />
+          <End Role="loan_app_or_rej" Type="Self.loan_app_or_rej" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="loan_application">
+              <PropertyRef Name="application_id" />
+            </Principal>
+            <Dependent Role="loan_app_or_rej">
+              <PropertyRef Name="application_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ApplicationId_FK">
+          <End Role="loan_application" Type="Self.loan_application" Multiplicity="1" />
+          <End Role="loan_officer_assign" Type="Self.loan_officer_assign" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="loan_application">
+              <PropertyRef Name="application_id" />
+            </Principal>
+            <Dependent Role="loan_officer_assign">
+              <PropertyRef Name="application_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_loan_application_registration">
+          <End Role="registration" Type="Self.registration" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="loan_application" Type="Self.loan_application" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="registration">
+              <PropertyRef Name="reg_id" />
+            </Principal>
+            <Dependent Role="loan_application">
+              <PropertyRef Name="reg_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OfficerId_FK">
+          <End Role="officers" Type="Self.officer" Multiplicity="1" />
+          <End Role="loan_officer_assign" Type="Self.loan_officer_assign" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="officers">
+              <PropertyRef Name="officer_id" />
+            </Principal>
+            <Dependent Role="loan_officer_assign">
+              <PropertyRef Name="officer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_role_id">
+          <End Role="roles" Type="Self.role" Multiplicity="1" />
+          <End Role="officers" Type="Self.officer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roles">
+              <PropertyRef Name="role_id" />
+            </Principal>
+            <Dependent Role="officers">
+              <PropertyRef Name="role_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_registration_remark_registration">
+          <End Role="registration" Type="Self.registration" Multiplicity="1" />
+          <End Role="registration_remark" Type="Self.registration_remark" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="registration">
+              <PropertyRef Name="reg_id" />
+            </Principal>
+            <Dependent Role="registration_remark">
+              <PropertyRef Name="reg_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PLMSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="loan_app_or_rej" EntityType="Self.loan_app_or_rej" />
+          <EntitySet Name="loan_application" EntityType="Self.loan_application" />
+          <EntitySet Name="loan_officer_assign" EntityType="Self.loan_officer_assign" />
+          <EntitySet Name="officers" EntityType="Self.officer" />
+          <EntitySet Name="registrations" EntityType="Self.registration" />
+          <EntitySet Name="roles" EntityType="Self.role" />
+          <EntitySet Name="registration_remark" EntityType="Self.registration_remark" />
+          <AssociationSet Name="FK_ApplicationID" Association="Self.FK_ApplicationID">
+            <End Role="loan_application" EntitySet="loan_application" />
+            <End Role="loan_app_or_rej" EntitySet="loan_app_or_rej" />
+          </AssociationSet>
+          <AssociationSet Name="ApplicationId_FK" Association="Self.ApplicationId_FK">
+            <End Role="loan_application" EntitySet="loan_application" />
+            <End Role="loan_officer_assign" EntitySet="loan_officer_assign" />
+          </AssociationSet>
+          <AssociationSet Name="FK_loan_application_registration" Association="Self.FK_loan_application_registration">
+            <End Role="registration" EntitySet="registrations" />
+            <End Role="loan_application" EntitySet="loan_application" />
+          </AssociationSet>
+          <AssociationSet Name="OfficerId_FK" Association="Self.OfficerId_FK">
+            <End Role="officers" EntitySet="officers" />
+            <End Role="loan_officer_assign" EntitySet="loan_officer_assign" />
+          </AssociationSet>
+          <AssociationSet Name="FK_role_id" Association="Self.FK_role_id">
+            <End Role="roles" EntitySet="roles" />
+            <End Role="officers" EntitySet="officers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_registration_remark_registration" Association="Self.FK_registration_remark_registration">
+            <End Role="registration" EntitySet="registrations" />
+            <End Role="registration_remark" EntitySet="registration_remark" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PLMSModelStoreContainer" CdmEntityContainer="PLMSEntities">
+          <EntitySetMapping Name="loan_app_or_rej">
+            <EntityTypeMapping TypeName="PLMSModel.loan_app_or_rej">
+              <MappingFragment StoreEntitySet="loan_app_or_rej">
+                <ScalarProperty Name="loan_id" ColumnName="loan_id" />
+                <ScalarProperty Name="application_id" ColumnName="application_id" />
+                <ScalarProperty Name="date_of_approval" ColumnName="date_of_approval" />
+                <ScalarProperty Name="amount_sanctioned" ColumnName="amount_sanctioned" />
+                <ScalarProperty Name="interest_rate" ColumnName="interest_rate" />
+                <ScalarProperty Name="reasons" ColumnName="reasons" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="loan_application">
+            <EntityTypeMapping TypeName="PLMSModel.loan_application">
+              <MappingFragment StoreEntitySet="loan_application">
+                <ScalarProperty Name="application_id" ColumnName="application_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="email_id" ColumnName="email_id" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="date_of_birth" ColumnName="date_of_birth" />
+                <ScalarProperty Name="age" ColumnName="age" />
+                <ScalarProperty Name="contact_no" ColumnName="contact_no" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="pan_no" ColumnName="pan_no" />
+                <ScalarProperty Name="loan_amount" ColumnName="loan_amount" />
+                <ScalarProperty Name="monthly_income" ColumnName="monthly_income" />
+                <ScalarProperty Name="company_name" ColumnName="company_name" />
+                <ScalarProperty Name="designation" ColumnName="designation" />
+                <ScalarProperty Name="office_address" ColumnName="office_address" />
+                <ScalarProperty Name="office_contact_no" ColumnName="office_contact_no" />
+                <ScalarProperty Name="office_email" ColumnName="office_email" />
+                <ScalarProperty Name="existing_loan" ColumnName="existing_loan" />
+                <ScalarProperty Name="photo" ColumnName="photo" />
+                <ScalarProperty Name="address_document" ColumnName="address_document" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="reg_id" ColumnName="reg_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="loan_officer_assign">
+            <EntityTypeMapping TypeName="PLMSModel.loan_officer_assign">
+              <MappingFragment StoreEntitySet="loan_officer_assign">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="application_id" ColumnName="application_id" />
+                <ScalarProperty Name="officer_id" ColumnName="officer_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="officers">
+            <EntityTypeMapping TypeName="PLMSModel.officer">
+              <MappingFragment StoreEntitySet="officers">
+                <ScalarProperty Name="officer_id" ColumnName="officer_id" />
+                <ScalarProperty Name="role_id" ColumnName="role_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="email_id" ColumnName="email_id" />
+                <ScalarProperty Name="contact_no" ColumnName="contact_no" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="registrations">
+            <EntityTypeMapping TypeName="PLMSModel.registration">
+              <MappingFragment StoreEntitySet="registration">
+                <ScalarProperty Name="reg_id" ColumnName="reg_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="contact_no" ColumnName="contact_no" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="date_of_birth" ColumnName="date_of_birth" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="email_id" ColumnName="email_id" />
+                <ScalarProperty Name="question" ColumnName="question" />
+                <ScalarProperty Name="answer" ColumnName="answer" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="roles">
+            <EntityTypeMapping TypeName="PLMSModel.role">
+              <MappingFragment StoreEntitySet="roles">
+                <ScalarProperty Name="role_id" ColumnName="role_id" />
+                <ScalarProperty Name="role_name" ColumnName="role_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="registration_remark">
+            <EntityTypeMapping TypeName="PLMSModel.registration_remark">
+              <MappingFragment StoreEntitySet="registration_remark">
+                <ScalarProperty Name="reg_id" ColumnName="reg_id" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
